@@ -1,5 +1,7 @@
 import { Page } from 'puppeteer';
 
+export const closeModal = async (page: Page) => page.keyboard.press('Escape');
+
 export const randomIndex = (
   min: number,
   max: number,
@@ -13,5 +15,3 @@ export const asyncForEach = async (array: any, cb: any) => {
   }
   return result;
 };
-
-export const closeModal = async (page: Page) => page.keyboard.press('Escape');

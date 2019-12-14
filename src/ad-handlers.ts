@@ -28,22 +28,26 @@ export const fetchAds = async () => {
     return results;
   };
 
-  const [resultsOne, resultsTwo] = await asyncForEach(
+  const [firtstSearch, secondSearch] = await asyncForEach(
     [words[randomize(words)], words[randomize(words)]],
     handleSearch
   );
-  const results = [...resultsOne, ...resultsTwo].filter(Boolean);
+
+  const ads = [...firtstSearch, ...secondSearch].filter(Boolean);
 
   browser.close();
-  return formatAds(results);
+
+  return formatAds(ads);
 };
 
 const formatAds = async (ads: string[]) => {
-  const adsToMake = [ads[randomize(ads)], ads[randomize(ads)]];
-  const newAd = adsToMake
+  const pickedAds = [ads[randomize(ads)], ads[randomize(ads)]];
+
+  const newAd = pickedAds
     .map((ad: string, i: number) =>
       i === 0 ? createAd(ad, 2, 'och') : createAd(ad, 2, null)
     )
     .join(' ');
+
   return newAd;
 };

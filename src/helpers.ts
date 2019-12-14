@@ -15,3 +15,15 @@ export const asyncForEach = async (array: any, cb: any) => {
   }
   return result;
 };
+
+export const createAd = (
+  ad: string,
+  split: number,
+  preposition: string | null
+) => {
+  return ad
+    .split(' ')
+    .slice(0, split)
+    .join(' ')
+    .concat(preposition ? ` ${preposition} ` : '');
+};

@@ -2,8 +2,8 @@ export type Word = string;
 
 export const words: Word[] = [
   'hund',
-  'traktor',
-  'fisk',
+  'epa',
+  'kul',
   'lägenhet',
   'tillskott',
   'groda'

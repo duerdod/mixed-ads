@@ -1,7 +1,7 @@
 import * as puppeteer from 'puppeteer';
 import * as dotenv from 'dotenv';
 import { words } from './constans';
-import { asyncForEach, closeModal, randomIndex } from './helpers';
+import { asyncForEach, closeModal, randomIndex, createAd } from './helpers';
 dotenv.config();
 
 const endpoint = process.env.BASE_ENDPOINT;
@@ -18,7 +18,6 @@ export const fetchAds = async () => {
     await page.goto(`${endpoint}/?q=${query}`);
     await closeModal(page);
 
-    // TODO: Return at least 10-15 results to randomize from.
     await page.waitForSelector('[class*="SearchResults__"]');
 
     const results = await page.$$eval(
@@ -35,29 +34,16 @@ export const fetchAds = async () => {
   ];
 
   const results = await asyncForEach(wordsToSearchFor, handleSearch);
-  const ads = [
-    results[0][randomIndex(0, results[0].length)],
-    results[0][randomIndex(0, results[0].length)]
-  ];
 
-  return formatAds(ads);
+  browser.close();
+  return formatAds(results[0]);
 };
 
 const formatAds = async (ads: string[]) => {
-  let newAd = '';
-  ads.forEach((ad: string, i: number) => {
-    if (i === 0) {
-      return (newAd +=
-        ad
-          .split(' ')
-          .slice(0, 2)
-          .join(' ') + ' med ');
-    }
-    return (newAd += ad
-      .split(' ')
-      .slice(0, 2)
-      .join(' '));
-  });
-
+  const newAd = ads
+    .map((ad: string, i: number) =>
+      i === 0 ? createAd(ad, 2, 'med') : createAd(ad, 2, null)
+    )
+    .join(' ');
   return newAd;
 };

@@ -1,5 +1,10 @@
 html
   head
+    link(rel='stylesheet', href='/public/style.css')
+    script(src='/public/js.js')
     title= title
   body
-    h1= ad
+    div.ad-container
+        h1.title= ad
+        button(type='button' onclick= "bringMeSomeAds()")= "Hitta annonser"
+    

@@ -12,15 +12,12 @@ const startServer = () => {
   app.use('/public', express.static(path.join(__dirname, '../public')));
 
   app.get('/', async (req, res) => {
-    const ad = await fetchAds();
-    console.log(ad);
-    res.render('index', { ad });
+    res.render('index');
   });
 
-  app.get('/ads', async (req, res) => {
+  app.get('/ad', async (req, res) => {
     const ad = await fetchAds();
-    console.log(ad);
-    return res.send({ ads: ad });
+    return res.send({ ad });
   });
 
   app.listen({ port: PORT }, () =>

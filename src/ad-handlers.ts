@@ -1,7 +1,7 @@
 import * as puppeteer from 'puppeteer';
 import * as dotenv from 'dotenv';
 import { words } from './constans';
-import { asyncForEach, closeModal, randomIndex, createAd } from './helpers';
+import { asyncForEach, closeModal, randomize, createAd } from './helpers';
 dotenv.config();
 
 const endpoint = process.env.BASE_ENDPOINT;
@@ -22,27 +22,27 @@ export const fetchAds = async () => {
 
     const results = await page.$$eval(
       '[class*="SearchResults__"] > div',
-      divs => divs.map(div => div.getAttribute('aria-label') || 'Nej')
+      divs => divs.map(div => div.getAttribute('aria-label'))
     );
 
     return results;
   };
 
-  const wordsToSearchFor = [
-    words[randomIndex(0, words.length)],
-    words[randomIndex(0, words.length)]
-  ];
-
-  const results = await asyncForEach(wordsToSearchFor, handleSearch);
+  const [resultsOne, resultsTwo] = await asyncForEach(
+    [words[randomize(words)], words[randomize(words)]],
+    handleSearch
+  );
+  const results = [...resultsOne, ...resultsTwo].filter(Boolean);
 
   browser.close();
-  return formatAds(results[0]);
+  return formatAds(results);
 };
 
 const formatAds = async (ads: string[]) => {
-  const newAd = ads
+  const adsToMake = [ads[randomize(ads)], ads[randomize(ads)]];
+  const newAd = adsToMake
     .map((ad: string, i: number) =>
-      i === 0 ? createAd(ad, 2, 'med') : createAd(ad, 2, null)
+      i === 0 ? createAd(ad, 2, 'och') : createAd(ad, 2, null)
     )
     .join(' ');
   return newAd;
